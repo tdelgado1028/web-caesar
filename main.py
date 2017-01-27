@@ -42,7 +42,13 @@ class MainHandler(webapp2.RequestHandler):
 
     def post(self):
         message = self.request.get("message")
-        rotation = int(self.request.get("rotation"))
+################################################################
+#fun story, without this the page freaks out if rotation has null/empty value
+        if self.request.get("rotation") == "":
+            rotation = 0
+        else:
+            rotation = int(self.request.get("rotation"))
+################################################################
         encrypted_message = caesar.encrypt(message, rotation)
         escaped_message = cgi.escape(encrypted_message) #important bit that keeps page from freaking out with html tags
         content = build_page(escaped_message)
